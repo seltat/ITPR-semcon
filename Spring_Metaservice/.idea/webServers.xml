@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="0cd524e0-57bf-44f8-954e-0fc480ee4164" name="Local Deployment" url="http://flaxmonitor.eu/metaservice">
+        <fileTransfer port="0" mountedRoot="$PROJECT_DIR$/../../BUILDS/metaservice" accessType="MOUNT" />
+      </webServer>
+    </option>
+  </component>
+</project>
