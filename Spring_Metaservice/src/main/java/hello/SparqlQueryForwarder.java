@@ -43,6 +43,19 @@ public class SparqlQueryForwarder {
         }
     }
 
+    public String getStatus() {
+
+        try {
+            URL url = new URL(endpoint + "/api/active");
+            ConnectionHelper c = new ConnectionHelper(url);
+            List<String> res = c.get();
+            return res.stream().reduce("", String::concat);
+        }
+        catch (Exception e) {
+            return e.getMessage();
+        }
+    }
+
     private static String encodeValue(String value) {
         try {
             return URLEncoder.encode(value, StandardCharsets.UTF_8.toString());
