@@ -1,10 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import Home from "./components/Home";
-import CountryStats from "./components/CountryStats";
 import "./App.css";
-import FusekiTests from "./components/FusekiTests";
-import AiportCounter from "./components/AirportCounter";
 import CountryDelayView from "./views/CountryDelayView";
 import AirportDelayView from "./views/AirportDelayView";
 import AirlineDelayView from "./views/AirlineDelayView";
