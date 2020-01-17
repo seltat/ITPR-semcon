@@ -41,7 +41,7 @@ class Navigation extends Component {
                 </DropdownToggle>
                 <DropdownMenu left>
                   <DropdownItem header>Christoph Großauer</DropdownItem>
-                  <DropdownItem href="/top/airline">
+                  <DropdownItem href="/top/airline/">
                     Task 1: Fluglinien mit meisten Flügen
                   </DropdownItem>
                   <DropdownItem divider />
@@ -59,7 +59,7 @@ class Navigation extends Component {
                   </DropdownItem>
                   <DropdownItem divider />
                   <DropdownItem header>Franz Reischl</DropdownItem>
-                  <DropdownItem href="/franz" disabled>
+                  <DropdownItem href="/franz/" disabled>
                     Task 4: (noch nicht eingebunden)
                   </DropdownItem>
                 </DropdownMenu>
