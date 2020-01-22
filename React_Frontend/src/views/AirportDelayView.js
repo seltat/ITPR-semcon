@@ -57,7 +57,7 @@ export default class AirportDelayView extends React.Component {
         Order By desc(?delay)`;
 
     fetch(
-      "http://localhost:8080/sparql?query=" + encodeURIComponent(departureDelay)
+       "http://localhost:4040/rdf/sparql?query=" + encodeURIComponent(departureDelay) //<-- For use with Semantic container RDF Endpoint on Port 4040 (requires disabling CORS in Browser)  //"http://localhost:8080/sparql?query=" + encodeURIComponent(departureDelay) //<-- For use with MetaService on Port 8080
     )
       .then(res => res.json())
       .then(results =>

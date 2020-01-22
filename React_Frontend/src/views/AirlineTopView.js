@@ -52,7 +52,8 @@ class AirlineTopView extends Component {
       group by ?airport ?airline
       order by  ?airport desc(?nrFlights)`
     ];
-    const semConDomain = "http://localhost:8080/sparql?query=";
+   // const semConDomain = "http://localhost:8080/sparql?query=";     //<-- For use with MetaService on Port 8080
+    const semConDomain = "http://localhost:4040/rdf/sparql?query=";   //<-- For use with Semantic container RDF Endpoint on Port 4040 (requires disabling CORS in Browser)
     this.semConQueries(semConDomain, semConQueries);
   }
 

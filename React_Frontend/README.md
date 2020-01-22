@@ -66,7 +66,7 @@ docker rm -f semcon-franz
 metaservice is included in this repo.
 
 ## option 2 (DEV only)
-disable CORS security in browser settings
+disable CORS security in browser settings.
 https://stackoverflow.com/questions/4556429/disabling-same-origin-policy-in-safari
 
 ## option 3 - work in progress

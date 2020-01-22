@@ -398,8 +398,8 @@ class CountryDelayView extends Component {
     }
     GROUP BY ?origin`
     ];
-
-    this.semconQuery("http://localhost:8080/sparql", fusekiQueries);
+    this.semconQuery("http://localhost:4040/rdf/sparql", fusekiQueries);  //<-- For use with Semantic container RDF Endpoint on Port 4040 (requires disabling CORS in Browser)
+    //this.semconQuery("http://localhost:8080/sparql", fusekiQueries);    //<-- For use with MetaService on Port 8080
   }
   pad = (num, size) => {
     var s = num + "";

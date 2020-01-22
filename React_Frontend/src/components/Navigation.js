@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import Logo from "./jku.png";
 
 import {
   Navbar,
@@ -18,7 +17,9 @@ import {
 
 class Navigation extends Component {
   state = { isOpen: false };
-  toggle = () => {};
+  toggle = () => {
+    this.setState({ isOpen: !this.state.isOpen });
+  };
   render() {
     return (
       <div className="navbar-top">
@@ -49,6 +50,9 @@ class Navigation extends Component {
                   <DropdownItem href="/delay/country/">
                     Task 2: Durchschnittliches DepartureDelay nach Land
                   </DropdownItem>
+                  <DropdownItem href="/delay/country-alternative/">
+                    Task 2: Durchschnittliches DepartureDelay nach Land - nur 1 SPARQL query
+                  </DropdownItem>
                   <DropdownItem href="/delay/airline/">
                     Task 2: Durchschnittliches DepartureDelay nach Fluglinie
                   </DropdownItem>
@@ -65,9 +69,6 @@ class Navigation extends Component {
                 </DropdownMenu>
               </UncontrolledDropdown>
             </Nav>
-            <NavbarText>
-              <img height="20" src={Logo}></img>
-            </NavbarText>
           </Collapse>
         </Navbar>
       </div>
