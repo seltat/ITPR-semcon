@@ -19,11 +19,14 @@ import Footer from "../components/Footer";
 
 class AirlineTopView extends Component {
   state = {
+    render_counter: 0,
     loading_semcon: true,
     loading_dbPedia: true,
     activeTab: "1",
     semconData: [],
-    dbPediaData: []
+    dbPediaData: [],
+    airportData: [],
+    countryData: []
   };
 
   toggleTab = tab => {
@@ -32,10 +35,16 @@ class AirlineTopView extends Component {
 
   componentDidMount() {
     const dbPediaQueries = [
-      `select distinct ?nCountry (COUNT(*) AS ?nrAirports) 
-    where { ?country dbo:longName ?nCountry. ?city dbo:country ?country. ?airport dbo:city ?city. ?airport dbo:icaoLocationIdentifier ?icao. 
-    FILTER regex(?icao, "^....$"). FILTER regex(?icao, "^[A-Z]"). } 
-    group by ?nCountry order by desc(?nrAirports)`
+      `select distinct ?country ?icao AS ?airport
+      where { 
+      ?country dbo:longName ?nCountry. 
+      ?city dbo:country ?country. 
+      ?airport dbo:city ?city. 
+      ?airport dbo:icaoLocationIdentifier ?icao. 
+      FILTER regex(?icao, "^....$"). 
+      FILTER regex(?icao, "^[A-Z]"). }
+      GROUP BY ?nCountry
+      ORDER BY desc(?country)`
     ];
     const dbPediaDomain =
       "https://dbpedia.org/sparql?default-graph-uri=http://dbpedia.org&query=";
@@ -103,39 +112,124 @@ class AirlineTopView extends Component {
 
   render() {
     var daten = {};
-    var counter = 0;
-    var oldEntry = null;
-    var repCounter = 0;
-    this.state.semconData.forEach(element => {
-      var entry = {
-        airport: element.airport.value,
-        airline: element.airline.value,
-        amount: element.nrFlights.value
-      };
-      if (counter > 0) {
-        if (oldEntry.airport === entry.airport) {
-          repCounter++;
-          if (repCounter < 3) {
+      var counter = 0;
+      var oldEntry = null;
+      var repCounter = 0;
+      var daten_array = [];
+      this.state.semconData.forEach(element => {
+        var entry = {
+          airport: element.airport.value,
+          airline: element.airline.value,
+          amount: element.nrFlights.value
+        };
+        if (counter > 0) {
+          if (oldEntry.airport === entry.airport) {
+            repCounter++;
+            if (repCounter < 3) {
+              daten[counter] = entry;
+              counter++;
+              oldEntry = entry;
+            }
+          } else {
+            repCounter = 0;
             daten[counter] = entry;
-            counter++;
             oldEntry = entry;
+            counter++;
           }
         } else {
-          repCounter = 1;
           daten[counter] = entry;
-          oldEntry = entry;
           counter++;
+          oldEntry = entry;
         }
-      } else {
-        daten[counter] = entry;
-        counter++;
-        oldEntry = entry;
+      });
+
+      var countryList = [];
+      var dbPData = this.state.dbPediaData;
+      var semcData = this.state.semconData;
+
+      for(var i in semcData){
+        var obj = {
+          airport: semcData[i].airport.value, 
+          airline: semcData[i].airline.value, 
+          amount: semcData[i].nrFlights.value
+        };
+
+        for(var k in dbPData){
+          if(semcData[i].airport.value === dbPData[k].airport.value){
+            obj.country = dbPData[k].country.value;
+          }
+        }
+        obj.country = obj.country || 'undefined';
+        if(obj.country !== 'undefined'){
+          countryList.push(obj);
+        }
+        
       }
-    });
-    var daten_array = [];
-    Object.keys(daten).forEach((k, index) => {
-      daten_array[index] = daten[k];
-    });
+      
+      const groupBy = keys => array =>
+        array.reduce((objectsByKeyValue, obj) => {
+          const value = keys.map(key => obj[key]).join('-');
+          objectsByKeyValue[value] = (objectsByKeyValue[value] || []).concat(obj);
+          return objectsByKeyValue;
+        }, {});
+
+      const groupByCountry = groupBy(['country','airline']);
+
+      const groupedWithCountries = [];
+
+      Object.values(groupByCountry(countryList)).forEach(value => {
+        var counter = 0;
+        for(var i = 0; i < value.length; i++){
+          counter += parseInt(value[i].amount);
+        }
+        var obj = {
+          country: value[0].country,
+          airline: value[0].airline,
+          amount: counter
+        };    
+        groupedWithCountries.push(obj);    
+      });
+      
+      groupedWithCountries.sort(function(a,b){
+        if(a.country < b.country) {return -1; }
+        if(a.country > b.country) {return 1; }
+        if(a.amount > b.amount) {return -1; }
+        if(a.amount < b.amount) {return 1; }
+        return 0;
+      });
+
+      var prev = {
+        country: "",
+        airline: "",
+        amount: 0
+      };
+      var counter = 0;
+      var sortedList = [];
+
+      
+      groupedWithCountries.forEach(x => {
+        if(prev.country === x.country){
+          counter++;
+          if(counter < 3){
+            sortedList.push(x);
+          }
+        }else{
+          sortedList.push(x);
+          prev = x;
+          counter = 0;
+        }
+        prev = x;
+      });
+
+      sortedList.forEach(x => {
+        x.country = x.country.substring(x.country.lastIndexOf("/")+1);
+      })
+
+      Object.keys(daten).forEach((k, index) => {
+        daten_array[index] = daten[k];
+      });
+
+
     return (
       <React.Fragment>
         <Navigation />
@@ -151,6 +245,15 @@ class AirlineTopView extends Component {
                   }}
                 >
                   Flughäfen
+                </NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink
+                  onClick={() => {
+                    this.toggleTab("2");
+                  }}
+                >
+                  Länder
                 </NavLink>
               </NavItem>
             </Nav>
@@ -179,7 +282,31 @@ class AirlineTopView extends Component {
                   </Col>
                 </Row>
               </TabPane>
-            </TabContent>
+              <TabPane tabId="2">
+                <Row>
+                  <Col sm="12">
+                    <Table>
+                      <thead>
+                        <tr>
+                          <th scope="row">Land</th>
+                          <th scope="row">Fluglinie</th>
+                          <th scope="row">Anzahl Flüge</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      {sortedList.map(x => (
+                          <tr>
+                            <td>{x.country}</td>
+                            <td>{x.airline}</td>
+                            <td>{x.amount}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </Table>
+                  </Col>
+                </Row>
+              </TabPane>
+              </TabContent>
           </React.Fragment>
         )}
         <Footer creator="Christoph Großauer" />
