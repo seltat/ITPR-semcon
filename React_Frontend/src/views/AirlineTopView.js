@@ -122,6 +122,7 @@ class AirlineTopView extends Component {
           airline: element.airline.value,
           amount: element.nrFlights.value
         };
+        //filter top three
         if (counter > 0) {
           if (oldEntry.airport === entry.airport) {
             repCounter++;
@@ -147,6 +148,7 @@ class AirlineTopView extends Component {
       var dbPData = this.state.dbPediaData;
       var semcData = this.state.semconData;
 
+      //merge
       for(var i in semcData){
         var obj = {
           airport: semcData[i].airport.value, 
@@ -160,12 +162,12 @@ class AirlineTopView extends Component {
           }
         }
         obj.country = obj.country || 'undefined';
-        if(obj.country !== 'undefined'){
+        //if(obj.country !== 'undefined'){
           countryList.push(obj);
-        }
-        
+        //} 
       }
-      
+
+      //group by country, airline
       const groupBy = keys => array =>
         array.reduce((objectsByKeyValue, obj) => {
           const value = keys.map(key => obj[key]).join('-');
@@ -176,7 +178,7 @@ class AirlineTopView extends Component {
       const groupByCountry = groupBy(['country','airline']);
 
       const groupedWithCountries = [];
-
+      //translate to array
       Object.values(groupByCountry(countryList)).forEach(value => {
         var counter = 0;
         for(var i = 0; i < value.length; i++){
@@ -189,7 +191,7 @@ class AirlineTopView extends Component {
         };    
         groupedWithCountries.push(obj);    
       });
-      
+      //sort
       groupedWithCountries.sort(function(a,b){
         if(a.country < b.country) {return -1; }
         if(a.country > b.country) {return 1; }
@@ -206,7 +208,7 @@ class AirlineTopView extends Component {
       var counter = 0;
       var sortedList = [];
 
-      
+      //Filter top 3
       groupedWithCountries.forEach(x => {
         if(prev.country === x.country){
           counter++;
