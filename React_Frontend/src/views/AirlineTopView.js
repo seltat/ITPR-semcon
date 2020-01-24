@@ -18,15 +18,18 @@ import Navigation from "../components/Navigation";
 import Footer from "../components/Footer";
 
 class AirlineTopView extends Component {
+  data = {
+   country: [],
+   airport: []
+  }
   state = {
     render_counter: 0,
+    init_executed: false,
     loading_semcon: true,
     loading_dbPedia: true,
     activeTab: "1",
     semconData: [],
     dbPediaData: [],
-    airportData: [],
-    countryData: []
   };
 
   toggleTab = tab => {
@@ -110,12 +113,11 @@ class AirlineTopView extends Component {
     );
   }
 
-  render() {
+  fillTable(){
     var daten = {};
       var counter = 0;
       var oldEntry = null;
       var repCounter = 0;
-      var daten_array = [];
       this.state.semconData.forEach(element => {
         var entry = {
           airport: element.airport.value,
@@ -144,6 +146,10 @@ class AirlineTopView extends Component {
         }
       });
 
+      Object.keys(daten).forEach(k => {
+        this.data.airport.push(daten[k]);
+      });
+
       var countryList = [];
       var dbPData = this.state.dbPediaData;
       var semcData = this.state.semconData;
@@ -162,9 +168,9 @@ class AirlineTopView extends Component {
           }
         }
         obj.country = obj.country || 'undefined';
-        //if(obj.country !== 'undefined'){
+        if(obj.country !== 'undefined'){
           countryList.push(obj);
-        //} 
+        } 
       }
 
       //group by country, airline
@@ -225,13 +231,17 @@ class AirlineTopView extends Component {
 
       sortedList.forEach(x => {
         x.country = x.country.substring(x.country.lastIndexOf("/")+1);
-      })
-
-      Object.keys(daten).forEach((k, index) => {
-        daten_array[index] = daten[k];
+        this.data.country.push(x);
       });
+      this.setState({
+        init_executed: true
+      });
+  }
 
-
+  render() {
+    if(!this.state.init_executed && !this.state.loading_semcon && !this.state.loading_dbPedia){
+      this.fillTable();
+    };
     return (
       <React.Fragment>
         <Navigation />
@@ -272,7 +282,7 @@ class AirlineTopView extends Component {
                         </tr>
                       </thead>
                       <tbody>
-                        {daten_array.map(x => (
+                        {this.data.airport.map(x => (
                           <tr>
                             <td>{x.airport}</td>
                             <td>{x.airline}</td>
@@ -296,7 +306,7 @@ class AirlineTopView extends Component {
                         </tr>
                       </thead>
                       <tbody>
-                      {sortedList.map(x => (
+                      {this.data.country.map(x => (
                           <tr>
                             <td>{x.country}</td>
                             <td>{x.airline}</td>
