@@ -6,6 +6,7 @@ import CountryDelayView from "./views/CountryDelayView";
 import AirportDelayView from "./views/AirportDelayView";
 import AirlineDelayView from "./views/AirlineDelayView";
 import AirlineTopView from "./views/AirlineTopView";
+import Comparisons from "./views/Comparisons";
 
 function App() {
   return (
@@ -25,6 +26,9 @@ function App() {
         </Route>
         <Route exact path="/top/airline/">
           <AirlineTopView />
+        </Route>
+        <Route exact path="/comparisons/">
+          <Comparisons />
         </Route>
       </div>
     </Router>

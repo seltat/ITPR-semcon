@@ -59,8 +59,8 @@ class Navigation extends Component {
                   </DropdownItem>
                   <DropdownItem divider />
                   <DropdownItem header>Franz Reischl</DropdownItem>
-                  <DropdownItem href="/franz/" disabled>
-                    Task 4: (noch nicht eingebunden)
+                  <DropdownItem href="/comparisons/">
+                    Task 4: Weitere Abfragen/Vergleiche
                   </DropdownItem>
                 </DropdownMenu>
               </UncontrolledDropdown>
