@@ -12,15 +12,14 @@ import Footer from "../components/Footer";
 import Filter from "../components/Filter";
 
 
-class ComparisonsAvgDelayMonthWeekdayView extends Component {
+class ComparisonsAvgDelayYearWeekdayView extends Component {
 
-  sparqlQuery2="prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+  sparqlQuery3="prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
       "prefix xsd: <http://www.w3.org/2001/XMLSchema#>\n" +
       "prefix f:   <http://www.jku.at/dke/semcon/departuredelays#>\n" +
       "\n" +
       "SELECT \n" +
       "    ?year \n" +
-      "    ?month \n" +
       "    ?dayName\n" +
       "    (COUNT(DISTINCT ?flight) as ?count) \n" +
       "    (AVG(?delayMinutes) as ?avgDelay)\n" +
@@ -32,7 +31,6 @@ class ComparisonsAvgDelayMonthWeekdayView extends Component {
       "    ?flight f:hasDepartureDelay ?delay .\n" +
       "    BIND( hours(?delay)*60+ minutes(?delay) AS ?delayMinutes)\n" +
       "    BIND(year(?plannedDeparture) AS ?year)\n" +
-      "    BIND(month(?plannedDeparture) AS ?month)\n" +
       "\n" +
       "    BIND (?plannedDeparture - \"1900-01-01\"^^xsd:date AS ?dayOffset)\n" +
       "    BIND (xsd:integer(day(?dayOffset)) as ?dayLiteral)\n" +
@@ -48,7 +46,7 @@ class ComparisonsAvgDelayMonthWeekdayView extends Component {
       "  }\n" +
       "  {filter}\n" +
       "} \n" +
-      "GROUP BY ?year ?month ?dayName";
+      "GROUP BY ?year ?dayName\n";
 
   state = {
     loading: false,
@@ -70,7 +68,7 @@ class ComparisonsAvgDelayMonthWeekdayView extends Component {
 
   callSemconQuery(filter=''){
     this.semconQuery("http://localhost:8080/sparql",
-        new Array(this.getFilteredQuery(this.sparqlQuery2, filter)))
+        new Array(this.getFilteredQuery(this.sparqlQuery3, filter)))
   }
 
   semconQuery(semcon_endpoint, queries) {
@@ -99,7 +97,6 @@ class ComparisonsAvgDelayMonthWeekdayView extends Component {
                   return res.map(x => {
                     var y = {};
                     y.year = x.year.value;
-                    y.month = x.month.value;
                     y.count = x.count.value;
                     y.day = x.dayName.value;
                     y.avgDelay = parseFloat(x.avgDelay.value);
@@ -152,7 +149,6 @@ class ComparisonsAvgDelayMonthWeekdayView extends Component {
                         <thead>
                         <tr>
                           <th scope="row">Jahr</th>
-                          <th scope="row">Monat</th>
                           <th scope="row">Anzahl</th>
                           <th scope="row">Wochentag</th>
                           <th scope="row">Avg Verspätung</th>
@@ -167,7 +163,6 @@ class ComparisonsAvgDelayMonthWeekdayView extends Component {
 
                                 <tr key={x.month}>
                                   <td>{x.year}</td>
-                                  <td>{x.month}</td>
                                   <td>{x.count}</td>
                                   <td>{x.day}</td>
                                   <td>
@@ -192,4 +187,4 @@ class ComparisonsAvgDelayMonthWeekdayView extends Component {
   }
 }
 
-export default ComparisonsAvgDelayMonthWeekdayView;
+export default ComparisonsAvgDelayYearWeekdayView;
