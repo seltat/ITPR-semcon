@@ -3,27 +3,17 @@ import {
   Table,
   Row,
   Col,
-  Card,
-  TabPane,
-  TabContent,
-  Button,
-  CardTitle,
-  CardText,
-  NavLink,
-  NavItem,
-  Nav,
   Spinner,
   Container
 } from "reactstrap";
 
-import { Map, TileLayer, Marker, Popup } from "react-leaflet";
-import L from "leaflet";
+
 import Navigation from "../components/Navigation";
 import Footer from "../components/Footer";
 import Filter from "../components/Filter"
 
 
-class Comparisons extends Component {
+class ComparisonsAvgDelayMonthView extends Component {
 
   sparqlQuery1="prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
       "prefix xsd: <http://www.w3.org/2001/XMLSchema#>\n" +
@@ -59,12 +49,9 @@ class Comparisons extends Component {
     console.log("Comparision view got Filter: "+filterData);
     this.setState({filter: filterData});
     this.callSemconQuery(filterData)
-
-
   }
 
   getFilteredQuery(query,filter){
-
     return query.replace("{filter}",filter)
   }
 
@@ -184,4 +171,4 @@ class Comparisons extends Component {
   }
 }
 
-export default Comparisons;
+export default ComparisonsAvgDelayMonthView;
