@@ -48,7 +48,8 @@ class ComparisonsAvgDelayMonthWeekdayView extends Component {
       "  }\n" +
       "  {filter}\n" +
       "} \n" +
-      "GROUP BY ?year ?month ?dayName";
+      "GROUP BY ?year ?month ?dayName \n" +
+      "ORDER BY ?year ?month ?dayName";
 
   state = {
     loading: false,
@@ -138,7 +139,7 @@ class ComparisonsAvgDelayMonthWeekdayView extends Component {
                 <Container fluid>
                   <Row>
                     <Col>
-                      <h3>Weitere Abfragen</h3>
+                      <h3>Verspätung nach Wochentag je Monat und Jahr</h3>
                     </Col>
                   </Row>
                   <Row>

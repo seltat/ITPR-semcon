@@ -7,22 +7,23 @@ import {
   Container
 } from "reactstrap";
 
+
 import Navigation from "../components/Navigation";
 import Footer from "../components/Footer";
-import Filter from "../components/Filter";
+import Filter from "../components/Filter"
 
 
-class ComparisonsAvgDelayYearWeekdayView extends Component {
+class ComparisonsSumDelayMonthView extends Component {
 
-  sparqlQuery3="prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+  sparqlQuery5="prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
       "prefix xsd: <http://www.w3.org/2001/XMLSchema#>\n" +
       "prefix f:   <http://www.jku.at/dke/semcon/departuredelays#>\n" +
       "\n" +
       "SELECT \n" +
       "    ?year \n" +
-      "    ?dayName\n" +
+      "    ?month \n" +
       "    (COUNT(DISTINCT ?flight) as ?count) \n" +
-      "    (AVG(?delayMinutes) as ?avgDelay)\n" +
+      "    (SUM(?delayMinutes) as ?sumDelayMinutes)\n" +
       "    (MIN(?delayMinutes) as ?minDelay)\n" +
       "    (MAX(?delayMinutes) as ?maxDelay)\n" +
       "WHERE {\n" +
@@ -30,24 +31,12 @@ class ComparisonsAvgDelayYearWeekdayView extends Component {
       "    ?flight f:hasPlannedDeparture ?plannedDeparture .\n" +
       "    ?flight f:hasDepartureDelay ?delay .\n" +
       "    BIND( hours(?delay)*60+ minutes(?delay) AS ?delayMinutes)\n" +
-      "    BIND(year(?plannedDeparture) AS ?year)\n" +
       "\n" +
-      "    BIND (?plannedDeparture - \"1900-01-01\"^^xsd:date AS ?dayOffset)\n" +
-      "    BIND (xsd:integer(day(?dayOffset)) as ?dayLiteral)\n" +
-      "    BIND (xsd:integer(floor(?dayLiteral - (7 * floor(?dayLiteral/7)))) AS ?mod)\n" +
-      "    VALUES (?mod ?dayName) {\n" +
-      "         (0    \"Monday\")\n" +
-      "         (6    \"Tuesday\")\n" +
-      "         (5    \"Wednesday\")\n" +
-      "         (4    \"Thursday\")\n" +
-      "         (3    \"Friday\")\n" +
-      "         (2    \"Saturday\")\n" +
-      "         (1    \"Sunday\")\n" +
-      "  }\n" +
-      "  {filter}\n" +
+      "    BIND(year(?plannedDeparture) AS ?year)\n" +
+      "    BIND(month(?plannedDeparture) AS ?month)\n" +
       "} \n" +
-      "GROUP BY ?year ?dayName\n" +
-      "ORDER BY ?year ?dayName";
+      "GROUP BY ?year ?month\n" +
+      "ORDER BY ?year ?month\n";
 
   state = {
     loading: false,
@@ -69,19 +58,13 @@ class ComparisonsAvgDelayYearWeekdayView extends Component {
 
   callSemconQuery(filter=''){
     this.semconQuery("http://localhost:8080/sparql",
-        new Array(this.getFilteredQuery(this.sparqlQuery3, filter)))
+        new Array(this.getFilteredQuery(this.sparqlQuery5, filter)))
   }
 
   semconQuery(semcon_endpoint, queries) {
-    console.log(queries[0]);
-
     const urls = queries.map(
-        (query)=>{
-            // Workaround for '*' not being URL-encoded:
-            const workaroundQuery =  encodeURIComponent(query).split('*').join('%2A');
-
-            return  semcon_endpoint + "?query=" + workaroundQuery
-          });
+        query => semcon_endpoint + "?query=" + encodeURIComponent(query)
+    );
     Promise.all(
         urls.map(url =>
             fetch(url)
@@ -98,11 +81,12 @@ class ComparisonsAvgDelayYearWeekdayView extends Component {
                   return res.map(x => {
                     var y = {};
                     y.year = x.year.value;
+                    y.month = x.month.value;
                     y.count = x.count.value;
-                    y.day = x.dayName.value;
-                    y.avgDelay = parseFloat(x.avgDelay.value);
+                    y.sumDelayMinutes = parseInt(x.sumDelayMinutes.value);
                     y.minDelay = parseFloat(x.minDelay.value);
                     y.maxDelay = parseFloat(x.maxDelay.value);
+                    console.log(y);
                     return y;
                   });
                 })
@@ -136,7 +120,7 @@ class ComparisonsAvgDelayYearWeekdayView extends Component {
                 <Container fluid>
                   <Row>
                     <Col>
-                      <h3>Verspätung nach Wochentag je Jahr</h3>
+                      <h3>Verspätung je Monat und Jahr</h3>
                     </Col>
                   </Row>
                   <Row>
@@ -150,9 +134,9 @@ class ComparisonsAvgDelayYearWeekdayView extends Component {
                         <thead>
                         <tr>
                           <th scope="row">Jahr</th>
+                          <th scope="row">Monat</th>
                           <th scope="row">Anzahl</th>
-                          <th scope="row">Wochentag</th>
-                          <th scope="row">Avg Verspätung</th>
+                          <th scope="row">Sum Verspätung</th>
                           <th scope="row">Min Verspätung</th>
                           <th scope="row">Max Verspätung</th>
                         </tr>
@@ -164,12 +148,11 @@ class ComparisonsAvgDelayYearWeekdayView extends Component {
 
                                 <tr key={x.month}>
                                   <td>{x.year}</td>
+                                  <td>{x.month}</td>
                                   <td>{x.count}</td>
-                                  <td>{x.day}</td>
                                   <td>
-                                  {this.pad(x.avgDelay - (x.avgDelay % 1), 2)} Minuten{" "}
-                                  {this.pad(Math.round((x.avgDelay % 1) * 60), 2)}{" "}
-                                  Sekunden
+                                  {this.pad(Math.round((x.sumDelayMinutes - x.sumDelayMinutes % 60) / 60), 2)} Stunden{" "}
+                                  {this.pad(x.sumDelayMinutes % 60, 2)} Minuten
                                   </td>
                                   <td>{x.minDelay}</td>
                                   <td>{x.maxDelay}</td>
@@ -188,4 +171,4 @@ class ComparisonsAvgDelayYearWeekdayView extends Component {
   }
 }
 
-export default ComparisonsAvgDelayYearWeekdayView;
+export default ComparisonsSumDelayMonthView;

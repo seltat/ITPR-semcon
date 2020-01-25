@@ -9,6 +9,8 @@ import AirlineTopView from "./views/AirlineTopView";
 import ComparisonsAvgDelayMonthView from "./views/ComparisonsAvgDelayMonthView";
 import ComparisonsAvgDelayMonthWeekdayView from './views/ComparisonsAvgDelayMonthWeekdayView'
 import ComparisonsAvgDelayYearWeekdayView from "./views/ComparisonsAvgDelayYearWeekdayView";
+import ComparisonsAvgDelayHourMonthView from "./views/ComparisonsAvgDelayHourMonthView";
+import ComparisonsSumDelayMonthView from "./views/ComparisonsSumDelayMonthView";
 
 function App() {
   return (
@@ -39,10 +41,10 @@ function App() {
           <ComparisonsAvgDelayYearWeekdayView />
         </Route>
         <Route exact path="/comparisons/avgdelayhourmonth">
-          <ComparisonsAvgDelayMonthView />
+          <ComparisonsAvgDelayHourMonthView />
         </Route>
         <Route exact path="/comparisons/sumdelaymonth">
-          <ComparisonsAvgDelayMonthView />
+          <ComparisonsSumDelayMonthView />
         </Route>
         <Route exact path="/comparisons/avgdelayyear">
           <ComparisonsAvgDelayMonthView />

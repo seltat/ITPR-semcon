@@ -35,7 +35,8 @@ class ComparisonsAvgDelayMonthView extends Component {
       "    BIND(month(?plannedDeparture) AS ?month)\n" +
       "    {filter}\n" +
       "} \n" +
-      "GROUP BY ?year ?month\n";
+      "GROUP BY ?year ?month\n" +
+      "ORDER BY ?year ?month\n";
 
   state = {
     loading: false,
@@ -119,7 +120,7 @@ class ComparisonsAvgDelayMonthView extends Component {
                 <Container fluid>
                   <Row>
                     <Col>
-                      <h3>Weitere Abfragen</h3>
+                      <h3>Verspätung je Monat und Jahr</h3>
                     </Col>
                   </Row>
                   <Row>
