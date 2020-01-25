@@ -24,6 +24,7 @@ class Filter extends Component{
       filter3Origin: null,
       filter4Year1: null,
       filter4Year2: null,
+      filter: ''
     };
     this.handleFilter1SelectChange = this.handleFilter1SelectChange.bind(this);
     this.handleFilter2SelectChange = this.handleFilter2SelectChange.bind(this);
@@ -62,21 +63,21 @@ class Filter extends Component{
       filter1 = filter1.replace("{year1}",this.state.filter1Year1);
       filter1 = filter1.replace("{year2}",this.state.filter1Year2);
       filter = filter + "\n" + filter1;
-      console.log(filter);
+      // console.log(filter);
     }
     // Filter 2:
     if(this.state.filter2Selected){
       let filter2 = this.filterMinDelayMinutes;
       filter2 = filter2.replace("{min}",this.state.filter2MinDelay);
       filter = filter + "\n" + filter2;
-      console.log(filter);
+      // console.log(filter);
     }
     // Filter 3:
     if(this.state.filter3Selected){
       let filter3 = this.filterOrigin;
       filter3 = filter3.replace("{origin}", this.state.filter3Origin.toUpperCase());
       filter = filter + "\n" + filter3;
-      console.log(filter);
+      // console.log(filter);
     }
     // Filter 4:
     if(this.state.filter4Selected){
@@ -84,14 +85,17 @@ class Filter extends Component{
       filter4 = filter4.replace("{year1}",this.state.filter4Year1);
       filter4 = filter4.replace("{year2}",this.state.filter4Year2);
       filter = filter + "\n" + filter4;
-      console.log(filter);
+      // console.log(filter);
+      this.setState({filter: filter});
     }
 
+    function getFilter(){return this.state.filter}
 
 
     e.preventDefault();
     // if()
     this.forceUpdate()
+    this.props.parentCallback(filter);
     return false;
   }
 
@@ -133,13 +137,10 @@ class Filter extends Component{
 
   render() {
     return (
-        <Container style={{border: "1px solid red"}}>
-          <form name="filter_form" onSubmit={this.updateFilter} style={{border: "1px solid blue"}}>
+        <Container style={{border: "0px solid red"}}>
+          <form name="filter_form" onSubmit={this.updateFilter} style={{border: "0px solid blue"}}>
             <input id="filter_1_year_range_selected" type="checkbox"
                    onChange={this.handleFilter1SelectChange} checked={!!this.state.filter1Selected} />
-                     // console.log("Filter 1 selected");
-                     // document.getElementById("filter_4_year_compare_selected").checked = false;
-                   // }
             <label htmlFor="filter_1_year_range_selected">Filter by Years _ From_To | </label>
             <label htmlFor="filter_1_year_1">Year 1</label>
             <input name="filter_1_year_1" id="filter_1_year_1" type="number" placeholder="year 1"
@@ -166,10 +167,6 @@ class Filter extends Component{
             <hr/>
             <input id="filter_4_year_compare_selected" type="checkbox"
                    onChange={this.handleFilter4SelectChange} checked={!!this.state.filter4Selected} />
-                   {/*onChange={() => {*/}
-                   {/*  console.log("Filter 4 selected");*/}
-                   {/*  document.getElementById("filter_1_year_range_selected").checked = false;*/}
-                   {/*}}/>*/}
             <label htmlFor="filter_4_year_compare_selected">Filter compare Year X to Year Y | </label>
             <label htmlFor="filter_4_year_1">Year 1</label>
             <input name="filter_4_year_1" id="filter_4_year_1" type="number" placeholder="year X"
