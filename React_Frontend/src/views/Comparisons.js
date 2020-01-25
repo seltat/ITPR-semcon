@@ -41,9 +41,9 @@ class Comparisons extends Component {
       "    ?flight f:hasPlannedDeparture ?plannedDeparture .\n" +
       "    ?flight f:hasDepartureDelay ?delay .\n" +
       "    BIND( hours(?delay)*60+ minutes(?delay) AS ?delayMinutes)\n" +
-      "    {filter}" +
       "    BIND(year(?plannedDeparture) AS ?year)\n" +
       "    BIND(month(?plannedDeparture) AS ?month)\n" +
+      "    {filter}\n" +
       "} \n" +
       "GROUP BY ?year ?month\n";
 
@@ -56,16 +56,22 @@ class Comparisons extends Component {
   };
 
   filterCallback = (filterData) =>{
-    this.setState({filter: filterData});
     console.log("Comparision view got Filter: "+filterData);
+    this.setState({filter: filterData});
+    this.callSemconQuery(filterData)
 
 
   }
 
   getFilteredQuery(query,filter){
+
     return query.replace("{filter}",filter)
   }
 
+  callSemconQuery(filter=''){
+    this.semconQuery("http://localhost:8080/sparql",
+        new Array(this.getFilteredQuery(this.sparqlQuery1, filter)))
+  }
 
   semconQuery(semcon_endpoint, queries) {
     const urls = queries.map(
@@ -102,8 +108,7 @@ class Comparisons extends Component {
   }
 
   componentDidMount() {
-    this.semconQuery("http://localhost:8080/sparql",
-        new Array(this.getFilteredQuery(this.sparqlQuery1, this.state.filter)))
+    this.callSemconQuery()
   }
 
   pad = (num, size) => {
@@ -157,7 +162,11 @@ class Comparisons extends Component {
                                   <td>{x.year}</td>
                                   <td>{x.month}</td>
                                   <td>{x.count}</td>
-                                  <td>{x.avgDelay}</td>
+                                  <td>
+                                  {this.pad(x.avgDelay - (x.avgDelay % 1), 2)} Minuten{" "}
+                                  {this.pad(Math.round((x.avgDelay % 1) * 60), 2)}{" "}
+                                  Sekunden
+                                  </td>
                                   <td>{x.minDelay}</td>
                                   <td>{x.maxDelay}</td>
                                 </tr>
