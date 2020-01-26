@@ -11,6 +11,7 @@ import ComparisonsAvgDelayMonthWeekdayView from './views/ComparisonsAvgDelayMont
 import ComparisonsAvgDelayYearWeekdayView from "./views/ComparisonsAvgDelayYearWeekdayView";
 import ComparisonsAvgDelayHourMonthView from "./views/ComparisonsAvgDelayHourMonthView";
 import ComparisonsSumDelayMonthView from "./views/ComparisonsSumDelayMonthView";
+import ComparisonsAvgDelayYearView from "./views/ComparisonsAvgDelayYearView";
 
 function App() {
   return (
@@ -47,7 +48,7 @@ function App() {
           <ComparisonsSumDelayMonthView />
         </Route>
         <Route exact path="/comparisons/avgdelayyear">
-          <ComparisonsAvgDelayMonthView />
+          <ComparisonsAvgDelayYearView />
         </Route>
       </div>
     </Router>
