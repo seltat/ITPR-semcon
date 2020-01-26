@@ -36,13 +36,13 @@ class ComparisonsAvgDelayYearWeekdayView extends Component {
       "    BIND (xsd:integer(day(?dayOffset)) as ?dayLiteral)\n" +
       "    BIND (xsd:integer(floor(?dayLiteral - (7 * floor(?dayLiteral/7)))) AS ?mod)\n" +
       "    VALUES (?mod ?dayName) {\n" +
-      "         (0    \"Monday\")\n" +
-      "         (6    \"Tuesday\")\n" +
-      "         (5    \"Wednesday\")\n" +
-      "         (4    \"Thursday\")\n" +
-      "         (3    \"Friday\")\n" +
-      "         (2    \"Saturday\")\n" +
-      "         (1    \"Sunday\")\n" +
+      "         (0    \"0 Monday\")\n" +
+      "         (1    \"1 Tuesday\")\n" +
+      "         (2    \"2 Wednesday\")\n" +
+      "         (3    \"3 Thursday\")\n" +
+      "         (4    \"4 Friday\")\n" +
+      "         (5    \"5 Saturday\")\n" +
+      "         (6    \"6 Sunday\")\n" +
       "  }\n" +
       "  {filter}\n" +
       "} \n" +
