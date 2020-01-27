@@ -63,8 +63,23 @@ class Navigation extends Component {
                   </DropdownItem>
                   <DropdownItem divider />
                   <DropdownItem header>Franz Reischl</DropdownItem>
-                  <DropdownItem href="/franz/" disabled>
-                    Task 4: (noch nicht eingebunden)
+                  <DropdownItem href="/comparisons/avgdelaymonth">
+                    Task 4: Durchschnittliches DepartureDelay je Monat und Jahr
+                  </DropdownItem>
+                  <DropdownItem href="/comparisons/avgdelaymonthweekday">
+                    Task 4: Durchschnittliches DepartureDelay nach Wochentage je Monat
+                  </DropdownItem>
+                  <DropdownItem href="/comparisons/avgdelayyearweekday">
+                    Task 4: Durchschnittliches DepartureDelay nach Wochentag je Jahr
+                  </DropdownItem>
+                  <DropdownItem href="/comparisons/avgdelayhourmonth">
+                    Task 4: Durchschnittliches DepartureDelay nach Planabflugzeit je Monat
+                  </DropdownItem>
+                  <DropdownItem href="/comparisons/sumdelaymonth">
+                    Task 4: Summe DepartureDelay je Monat fortlaufend
+                  </DropdownItem>
+                  <DropdownItem href="/comparisons/avgdelayyear">
+                    Task 4: Durchschnittliches DepartureDelay je Jahr
                   </DropdownItem>
                 </DropdownMenu>
               </UncontrolledDropdown>
