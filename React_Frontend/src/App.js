@@ -3,11 +3,12 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import Home from "./components/Home";
 import "./App.css";
 import CountryDelayView from "./views/CountryDelayView";
+import CountryDelayView_alternative from "./views/CountryDelayView_alternative";
 import AirportDelayView from "./views/AirportDelayView";
 import AirlineDelayView from "./views/AirlineDelayView";
 import AirlineTopView from "./views/AirlineTopView";
 import ComparisonsAvgDelayMonthView from "./views/ComparisonsAvgDelayMonthView";
-import ComparisonsAvgDelayMonthWeekdayView from './views/ComparisonsAvgDelayMonthWeekdayView'
+import ComparisonsAvgDelayMonthWeekdayView from "./views/ComparisonsAvgDelayMonthWeekdayView";
 import ComparisonsAvgDelayYearWeekdayView from "./views/ComparisonsAvgDelayYearWeekdayView";
 import ComparisonsAvgDelayHourMonthView from "./views/ComparisonsAvgDelayHourMonthView";
 import ComparisonsSumDelayMonthView from "./views/ComparisonsSumDelayMonthView";

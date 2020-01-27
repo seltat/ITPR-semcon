@@ -56,7 +56,7 @@ class ComparisonsAvgDelayYearView extends Component {
   }
 
   callSemconQuery(filter=''){
-    this.semconQuery("http://localhost:8080/sparql",
+    this.semconQuery("http://localhost:4040/rdf/sparql",
         new Array(this.getFilteredQuery(this.sparqlQuery6, filter)))
   }
 
